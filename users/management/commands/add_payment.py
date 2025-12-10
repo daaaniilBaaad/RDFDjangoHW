@@ -1,12 +1,13 @@
-from django.core.management.base import BaseCommand
-from users.models import Payments, User
-from study.models import Course, Lesson
 from datetime import datetime
 
+from django.core.management.base import BaseCommand
+
+from study.models import Course, Lesson
+from users.models import Payments, User
 
 
 class Command(BaseCommand):
-    help = 'Add test payments to the database'
+    help = "Add test payments to the database"
 
     def handle(self, *args, **kwargs):
         """Кастомная команда для записи данных в таблицу"""
@@ -17,18 +18,22 @@ class Command(BaseCommand):
 
         payments = [
             {
-                'user': user,
-                'pay_date': datetime.now(),
-                'paid_course': course,
+                "user": user,
+                "pay_date": datetime.now(),
+                "paid_course": course,
                 # 'paid_lesson': lesson,
-                'pay_amount': 10000,
-                'pay_method': 'transfer',
+                "pay_amount": 10000,
+                "pay_method": "transfer",
             },
         ]
 
         for payment_data in payments:
             payment, created = Payments.objects.get_or_create(**payment_data)
             if created:
-                self.stdout.write(self.style.SUCCESS(f'Successfully added payment for {payment.user}'))
+                self.stdout.write(
+                    self.style.SUCCESS(f"Successfully added payment for {payment.user}")
+                )
             else:
-                self.stdout.write(self.style.WARNING(f'Payment already exists for {payment.user}'))
+                self.stdout.write(
+                    self.style.WARNING(f"Payment already exists for {payment.user}")
+                )
