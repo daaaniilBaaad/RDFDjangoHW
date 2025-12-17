@@ -48,11 +48,17 @@ class Payments(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    pay_date = models.DateTimeField(verbose_name='Дата оплаты', null=True, blank=True)
-    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True, blank=True)
-    pay_amount = models.IntegerField(verbose_name='сумма оплаты', null=True, blank=True)
-    pay_method = models.CharField(max_length=20, choices=PAYMENT_METHOD, verbose_name='Способ оплаты')
+    pay_date = models.DateTimeField(verbose_name="Дата оплаты", null=True, blank=True)
+    paid_course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, null=True, blank=True
+    )
+    paid_lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE, null=True, blank=True
+    )
+    pay_amount = models.IntegerField(verbose_name="сумма оплаты", null=True, blank=True)
+    pay_method = models.CharField(
+        max_length=20, choices=PAYMENT_METHOD, verbose_name="Способ оплаты"
+    )
 
     class Meta:
         verbose_name = "Платеж"
