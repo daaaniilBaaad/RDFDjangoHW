@@ -1,23 +1,14 @@
 # Указываем базовый образ
-FROM python:3.12.3
+FROM python:3.13
 
 # Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
 # Копируем файл зависимостей
-COPY pyproject.toml poetry.lock ./
+COPY requirements.txt ./
 
-# Обновляем pip
-RUN pip install --upgrade pip
-
-# Устанавливаем Poetry
-RUN pip install poetry
-
-# Отключаем создание нового виртуального окружения
-RUN poetry config virtualenvs.create false
-
-# Устанавливаем только зависимости
-RUN poetry install --no-root
+# Обновляем pip и устанавливаем зависимости из requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Копируем остальной код приложения
 COPY . .
@@ -26,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Команда для запуска Django-сервера
-CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
