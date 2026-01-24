@@ -7,18 +7,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code to custom directory
+    - name: Check out code to custom path
       uses: actions/checkout@v3
       with:
-        path: RDFDjangoHW  # Клонируем напрямую в RDFDjangoHW
+        path: /home/runner/work/RDFDjangoHW
 
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.13'
 
+    - name: Verify we're in right directory
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Files:"
+        ls -la
+
     - name: Install dependencies and run migrations
-      working-directory: /home/runner/work/RDFDjangoHW
       env:
         DJANGO_SETTINGS_MODULE: 'config.settings'
       run: |
@@ -27,7 +32,6 @@ jobs:
         python manage.py migrate --noinput
 
     - name: Run tests
-      working-directory: /home/runner/work/RDFDjangoHW
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
@@ -44,16 +48,15 @@ jobs:
     needs: test
 
     steps:
-    - name: Check out code to custom directory
+    - name: Check out code to custom path
       uses: actions/checkout@v3
       with:
-        path: RDFDjangoHW
+        path: /home/runner/work/RDFDjangoHW
 
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
     - name: Build and push Docker images
-      working-directory: /home/runner/work/RDFDjangoHW
       run: |
         docker compose build
         docker compose push
