@@ -20,6 +20,22 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Create .env file from GitHub Secrets
+      run: |
+        cat > .env << EOF
+        SECRET_KEY=${{ secrets.SECRET_KEY }}
+        DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+        DATABASE_USER=${{ secrets.DATABASE_USER }}
+        PASSWORD=${{ secrets.PASSWORD }}
+        HOST=${{ secrets.HOST }}
+        PORT=${{ secrets.PORT }}
+        DEBUG=False
+        ALLOWED_HOSTS=localhost,127.0.0.1
+        EOF
+        
+        echo "Created .env file:"
+        cat .env | sed 's/PASSWORD=.*/PASSWORD=***/g'  # Маскируем пароль в логах
+
     - name: Run migrations
       env:
         DJANGO_SETTINGS_MODULE: 'config.settings'
