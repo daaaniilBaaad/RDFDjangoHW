@@ -51,7 +51,7 @@ else:
             "NAME": os.getenv("NAME"),
             "USER": os.getenv("USER"),
             "PASSWORD": os.getenv("PASSWORD"),
-            "HOST": os.getenv("HOST", "localhost"),
+            "HOST": os.getenv("HOST", "127.0.0.1"),
             "PORT": os.getenv("PORT", "5432"),
         }
     }
